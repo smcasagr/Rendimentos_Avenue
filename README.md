@@ -20,7 +20,7 @@ Obs.: Os valores do arquivo do repositório são fictícios.
 ---
 This is a simple script to split the dividend and tax data from the BR-CSV file of the Avenue brokerage statement.
 
-This script is intended to be used with the [dlombello](https://www.dlombelloplanilhas.com/)) spreadsheet, as the output separates and orders the dividend
+This script is intended to be used with the [dlombello](https://www.dlombelloplanilhas.com/) spreadsheet, as the output separates and orders the dividend
 data in the same format as the mentioned spreadsheet.
 
 The script is easy to understand: from the .csv file reading, the script generates a .xslx file formatted is the same 
