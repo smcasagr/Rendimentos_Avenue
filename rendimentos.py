@@ -40,7 +40,7 @@ class ReadAvenueCSV():
         file_name : string
             Name of the file that will be generated - by default, the name will be "proventos_avenue"
         """
-        self.df_sheet.to_excel(output_file_name + '.xlsx')
+        self.df_sheet.to_excel(output_file_name.split(".")[0] + '.xlsx')
 
     def _clean_report_file(self, df):
         """
@@ -234,11 +234,9 @@ class ReadAvenueCSV():
         output_file : string
             Path, with the file name, where the formatted Excel file will be saved.
             It is important to note that the file extension will be automatically placed be the script. 
-            That said, the user MUST place the output file name WITHOUT the file extension.
-
         """
-        obj = ReadAvenueCSV(file=input_file, summarizer=summarize)
-        obj.generate_file(output_file_name=output_file)
+        obj = ReadAvenueCSV(input_file=input_file, summarizer=summarize)
+        obj.generate_file(output_file_name=output_file)        
 
 def main():
     fire.Fire(ReadAvenueCSV.extract)
