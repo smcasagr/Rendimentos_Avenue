@@ -21,12 +21,12 @@ class ReadAvenueCSV():
             True - Summarize totals at the end of each month
             False - Generates the output file without the summarizer
         """
-        try:
-            self.summarizer = summarizer
+        try:            
             self.df_input_file = pd.read_csv(input_file, sep=';', parse_dates=True)
+            self.summarizer = summarizer
             
-            self._clean_report_file(self.df_input_file)
-            self.df_sheet = self._create_df_sheet(self.df_input_file)
+            self.__clean_report_file(self.df_input_file)
+            self.df_sheet = self.__create_df_sheet(self.df_input_file)
         except FileNotFoundError:
             self.df_input_file = False
             print(f"Arquivo {input_file} Inexistente")
@@ -42,7 +42,7 @@ class ReadAvenueCSV():
         """
         self.df_sheet.to_excel(output_file_name.split(".")[0] + '.xlsx')
 
-    def _clean_report_file(self, df):
+    def __clean_report_file(self, df):
         """
         Delete unused columns and rename the remaining columns with the same name used by the dlombello spreadsheet.
 
@@ -55,7 +55,7 @@ class ReadAvenueCSV():
         df.rename(columns={'Valor (U$)': 'Valor', 'Saldo da conta (U$)': 'Saldo'}, inplace=True)        
         df.set_index('Data', inplace=True)
 
-    def _read_dividends(self, df_input_file):
+    def __read_dividends(self, df_input_file):
         """
         Read the dataframe containing the CSV data and extract the rows that contain the dividends.
 
@@ -91,7 +91,7 @@ class ReadAvenueCSV():
 
         return df_dividends
 
-    def _read_taxes(self, df_input_file):
+    def __read_taxes(self, df_input_file):
         """
         Read the dataframe containing the CSV data and extract the rows that contain the dividend taxes paid.
 
@@ -129,7 +129,7 @@ class ReadAvenueCSV():
 
         return df_taxes
 
-    def _create_df_sheet(self, df_input_file):
+    def __create_df_sheet(self, df_input_file):
         """
         This function performs the merge of the dataframes containing the extracted data of dividends and taxes, 
         and formats it in the same shape as utilized by the dlombello spreadsheet
@@ -150,8 +150,8 @@ class ReadAvenueCSV():
         
         df_sheet = pd.DataFrame(columns=cols_sheet)
 
-        df_dividends = self._read_dividends(df_input_file)
-        df_taxes = self._read_taxes(df_input_file)
+        df_dividends = self.__read_dividends(df_input_file)
+        df_taxes = self.__read_taxes(df_input_file)
         
         df_merged = pd.merge(df_dividends, df_taxes, on=['data', 'ativo'], how='left')
         
@@ -161,14 +161,14 @@ class ReadAvenueCSV():
         df_sheet['valorLiq'] = df_sheet['valorBruto'] + df_sheet['imposto']
         df_sheet.loc[df_sheet['valorLiq'].isnull(), 'valorLiq'] = df_sheet['valorBruto']
 
-        df_sheet = self._format_type_dfsheet(df_sheet)
+        df_sheet = self.__format_type_dfsheet(df_sheet)
 
         if self.summarizer:
-            df_sheet = self._create_summarizer(df_sheet)
+            df_sheet = self.__create_summarizer(df_sheet)
 
         return df_sheet
 
-    def _create_summarizer(self, df_sheet):
+    def __create_summarizer(self, df_sheet):
         """
         Create the totalizers at the end of each month
 
@@ -199,7 +199,7 @@ class ReadAvenueCSV():
 
         return df_sheet
 
-    def _format_type_dfsheet(self, df_formatted):
+    def __format_type_dfsheet(self, df_formatted):
         """
         Auxiliary function used to create an additional column, which contains the month of each entry row.
 
